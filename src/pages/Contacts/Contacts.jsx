@@ -45,11 +45,13 @@ const Contacts = () => {
       subName.toLowerCase() !==
       contacts.find(contact => contact.id === subId)?.name.toLowerCase();
 
-    if (!isNameChanged) {
-      Notify.warning(`The name of the contact remains the same.`);
+    if (
+      !isNameChanged &&
+      subNumber === contacts.find(contact => contact.id === subId)?.number
+    ) {
+      Notify.warning(`No changes were made to the contact.`);
       return;
     }
-
     const isNameAlreadyExists = contacts.some(
       contact =>
         contact.name.toLowerCase() === subName.toLowerCase() &&
