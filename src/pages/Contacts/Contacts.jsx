@@ -41,8 +41,28 @@ const Contacts = () => {
   }, [dispatch]);
 
   const handleChange = () => {
-    setIsModalOpen(false);
+    const isNameChanged =
+      subName.toLowerCase() !==
+      contacts.find(contact => contact.id === subId)?.name.toLowerCase();
+
+    if (!isNameChanged) {
+      Notify.warning(`The name of the contact remains the same.`);
+      return;
+    }
+
+    const isNameAlreadyExists = contacts.some(
+      contact =>
+        contact.name.toLowerCase() === subName.toLowerCase() &&
+        contact.id !== subId
+    );
+
+    if (isNameAlreadyExists) {
+      Notify.warning(`A contact with the name "${subName}" already exists.`);
+      return;
+    }
+
     dispatch(updateContact({ id: subId, name: subName, number: subNumber }));
+    setIsModalOpen(false);
     Notify.success(`Contact modified`);
   };
 
